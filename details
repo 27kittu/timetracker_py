@@ -1,0 +1,59 @@
+everest
+cv27.one@gmail.com
+lookup1.ok
+
+
+ramco
+login1@all
+kittu9.nine@gmail.com
+
+
+
+
+
+
+You can do one more thing while you’re at it, which is to make sure the Django secret key used for cryptographic signing isn’t hard-coded in settings.py, which Git will likely track. Remove the following line from project/settings.py:
+
+SECRET_KEY = "django-insecure-o6w@a46mx..."  # Remove this line
+Replace it with the following:
+
+import os
+
+# ...
+
+try:
+    SECRET_KEY = os.environ["SECRET_KEY"]
+except KeyError as e:
+    raise RuntimeError("Could not find a SECRET_KEY in environment") from e
+    
+    
+This tells Django to look in your environment for SECRET_KEY rather than including it in your application source code.
+
+Note: For larger projects, check out django-environ to configure your Django application with environment variables.
+
+Finally, set the key in your environment. Here’s how you could do that on Ubuntu Linux using OpenSSL to set the key to an eighty-character string:
+
+
+$ echo "export SECRET_KEY='$(openssl rand -hex 40)'"> .DJANGO_SECRET_KEY
+$ source .DJANGO_SECRET_KEY
+You can cat the contents of .DJANGO_SECRET_KEY to see that openssl has generated a cryptographically secure hex string key:
+
+$ cat .DJANGO_SECRET_KEY
+export SECRET_KEY='26a2d2ccaf9ef850...'
+Alright, you’re all set. That’s all you need to have a minimally functioning Django app.
+
+
+
+
+---------------------------------
+to convert 'isoformat' date or time 
+
+
+from datetime import date, time, datetime
+
+ - time.fromisoformat(isoformat string)
+----------------------------------
+- To delete sqlite3 rows,
+
+DELETE FROM input_daily_records WHERE id=3;
+-------------------------------------------
