@@ -3,8 +3,9 @@
 # creating all the environment variables in a file
 cat >.env_all<<EOF
 export SECRET_KEY='$(openssl rand -hex 40)'
-export LOOKUP_HOME=./
-export VIRT_ENV_LOC='~/.virtenv/bin/activate'
+export LOOKUP_HOME=$(pwd)
+export VIRTENV_LOC='~/.virtenv/'
+export VIRTENV_ACT_LOC="$(VIRTENV_LOC)/bin/activate"
 EOF
 
 #source the above file
@@ -19,11 +20,10 @@ fi
 
 # check if the virtualenv is installed
 #if [ ! -d '~/env' ]
-if [ ! -d $(VIRT_ENV_LOC)
+if [ ! -d $(VIRTENV_LOC)
 then
-        python -m virtualenv $(VIRT_ENV_LOC)
+        python -m virtualenv $(VIRTENV_LOC)
 fi
 
-pip install -r $LOOKUP_HOME/requirements
-nohup python /home/ubuntu/everest/ramcov4/lookup/manage.py runserver 0.0.0.0:8000 &
-
+pip install -r $(LOOKUP_HOME)/requirements
+nohup python $(LOOKUP_HOME)/manage.py runserver 0.0.0.0:8000 &
