@@ -1,5 +1,5 @@
-.swo
-.swp
-.pyc
+*.swo
+*.swp
+*.pyc
 .env_all
 nohup.out
