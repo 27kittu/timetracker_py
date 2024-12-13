@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "export SEC='$(openssl rand -hex 40)'" > .DJANGO_SEC_KEY
-source .DJANGO_SEC_KEY

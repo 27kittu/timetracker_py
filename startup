@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo "export SECRET_KEY='$(openssl rand -hex 40)'" > ./.DJANGO_SECRET_KEY
-source ./.DJANGO_SECRET_KEY
-
-nohup python manage.py runserver 0.0.0.0:8000 & 
