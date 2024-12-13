@@ -1,24 +1,29 @@
 #!/bin/bash
 
-# Create a secret key for the django app
-echo "export SECRET_KEY='$(openssl rand -hex 40)'" > ./.DJANGO_SECRET_KEY
-source ./.DJANGO_SECRET_KEY
+# creating all the environment variables in a file
+cat >.env_all<<EOF
+export SECRET_KEY='$(openssl rand -hex 40)'
+export LOOKUP_HOME=$(pwd)
+export VIRTENV_LOC='~/.virtenv/'
+export VIRTENV_ACT_LOC="${VIRTENV_LOC}/bin/activate"
+EOF
 
+#source the above file
+source .env_all
 
-# check if the required packages are installed or not 
-if [[ ! $(dpkg --get-selections | grep '^python3-pip.*install$') || ! $(dpkg --get-selections | grep '^virtualenv.*install$') || ! $(dpkg --get-selections | grep '^python-is-python3.*install$') ]]
-then 
-	sudo apt install python-is-python3 python3-pip virtualenv -y
+#  check if the required packages are installed or not
+if [[ ! $(dpkg --get-selections | grep '^python3-pip.*install$') || ! $(dpkg --get-selections | grep '^virtualenv.*install$') || ! $(d
+pkg --get-selections | grep '^python-is-python3.*install$') ]]
+then
+  sudo apt update && sudo apt install python-is-python3 python3-pip virtualenv -y
 fi
 
 # check if the virtualenv is installed
-if [ ! -d '~/env' ]
-then 
-	python -m virtualenv ~/env
+#if [ ! -d '~/env' ]
+if [ ! -d ${VIRTENV_LOC} ]
+then
+        python -m virtualenv ${VIRTENV_LOC}
 fi
 
-#sudo -i -u ubuntu bash << eof
-#source ~/env/bin/activate
-#pip install -r /home/ubuntu/everest/ramcov4/lookup/requirements
-nohup python /home/ubuntu/everest/ramcov4/lookup/manage.py runserver 0.0.0.0:8000 &
-#eof
+pip install -r ${LOOKUP_HOME}/requirements
+nohup python ${LOOKUP_HOME}/manage.py runserver 0.0.0.0:8000 &
